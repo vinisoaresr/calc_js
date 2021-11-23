@@ -1,21 +1,21 @@
-var memory = '';
-
+var valueMemoryNew = '',
+    valueMemoryOld = '';
 
 var button = document.getElementsByClassName('button');
 for (let i=0; i < button.length; i++){
-    button[i].addEventListener('click', inputMemory);
+    button[i].addEventListener('click', inputvalueMemoryNew);
 }
 
-
-function inputMemory(value){
+//função provisória
+function inputvalueMemoryNew(value){
     console.log(value)
-    if (isNaN(memory)){   /// Verifica se não é número (AC, +, -, Div, Percent, etc.) para não alterar o estado do display ('0')
+    if (isNaN(valueMemoryNew)){   // Verifica se não é número (ac, +, -, Div, Percent, etc.) para não alterar o estado do display ('0')
         printDisplay('')
     }
     
     if (isNaN(value.path[0].id) === true){
-        if (value.path[0].id === "AC" ){
-            console.log('chamar função AC')
+        if (value.path[0].id === "ac" ){
+            console.log('chamar função ac')
         }
 
         else if(value.path[0].id === "plus_minus" ){
@@ -31,26 +31,25 @@ function inputMemory(value){
         }
 
         else if(value.path[0].id === "times" ){
-            somar(memory);
+            somar(valueMemoryNew);
             console.log('chamar função times');
         }
         
         else if(value.path[0].id === "minus" ){
-            somar(memory);
+            somar(valueMemoryNew, valueMemoryOld);
             console.log('chamar função minus');
         }
         
         else if(value.path[0].id === "plus" ){
-            somar(memory);
+            somar(valueMemoryNew);
             console.log('chamar função plus');
         }
     }
 
-    if (isNaN(value.path[0].value) === false){
-        let str_value = String(value.path[0].value);
-        memory = memory + str_value;
-        console.log(memory);
-        printDisplay(memory);
+    if (isNaN(value.path[0].id) === false){ //Verifica se é número e printa no display
+        let valueNumberInput = String(value.path[0].id);
+        valueMemoryNew += valueNumberInput;
+        printDisplay(valueMemoryNew);
     }
 }
 
@@ -67,10 +66,10 @@ function printDisplay(value){  // Função que recebe um parâmetro para imprimi
     display.innerHTML = value;
 }
 
-// Função para o botão AC (limpa o display com uma string vazia)
-function AC(){
-    memory = '0';
-    printDisplay(memory);
+// Função para o botão ac (limpa o display com uma string vazia)
+function ac(){
+    valueMemoryNew = '0';
+    printDisplay(valueMemoryNew);
 }
 
 function plus(input){
@@ -89,6 +88,6 @@ function plus(input){
 }
 
 function minus(input){
-    memory = ''
-    printDisplay(memory);
+    valueMemoryNew = ''
+    printDisplay(valueMemoryNew);
 }
