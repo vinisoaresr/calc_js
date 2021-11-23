@@ -1,27 +1,48 @@
 var memory = '';
 
-var button = document.getElementsByClassName('button');
 
+var button = document.getElementsByClassName('button');
 for (let i=0; i < button.length; i++){
-    button[i].addEventListener('click', input_memory);
+    button[i].addEventListener('click', inputMemory);
 }
 
-function input_memory(value){
-    if (isNaN(memory)){
-        print_display('')
+
+function inputMemory(value){
+    console.log(value)
+    if (isNaN(memory)){   /// Verifica se não é número (AC, +, -, Div, Percent, etc.) para não alterar o estado do display ('0')
+        printDisplay('')
     }
     
-    if (isNaN(value.path[0].value) === true){
-        if (value.path[0].value === "AC" ){
-            AC();
+    if (isNaN(value.path[0].id) === true){
+        if (value.path[0].id === "AC" ){
             console.log('chamar função AC')
         }
-        else if(value.path[0].value === "%" ){
+
+        else if(value.path[0].id === "plus_minus" ){
+            console.log('chamar função plusMinus')
+        }
+        
+        else if(value.path[0].id === "percent" ){
             console.log('chamar função percent')
         }
-        else if(value.path[0].value === "+" ){
+
+        else if(value.path[0].id === "divided_by" ){
+            console.log('chamar função dividedBy');
+        }
+
+        else if(value.path[0].id === "times" ){
             somar(memory);
-            console.log('chamar função soma()');
+            console.log('chamar função times');
+        }
+        
+        else if(value.path[0].id === "minus" ){
+            somar(memory);
+            console.log('chamar função minus');
+        }
+        
+        else if(value.path[0].id === "plus" ){
+            somar(memory);
+            console.log('chamar função plus');
         }
     }
 
@@ -29,36 +50,45 @@ function input_memory(value){
         let str_value = String(value.path[0].value);
         memory = memory + str_value;
         console.log(memory);
-        print_display(memory);
+        printDisplay(memory);
     }
 }
 
-function print_display(value){
+
+function main(){
+    console.log('função main()')
+}
+
+
+
+// OK - FUNCIONANDO
+function printDisplay(value){  // Função que recebe um parâmetro para imprimir no display 
     let display = document.getElementById('display');
     display.innerHTML = value;
 }
 
+// Função para o botão AC (limpa o display com uma string vazia)
 function AC(){
-    memory = ''
-    print_display(memory);
+    memory = '0';
+    printDisplay(memory);
 }
 
-function somar(input){
-    print_display('');
+function plus(input){
+    printDisplay('');
     let valor_anterior = undefined;
 
     if  (valor_anterior === undefined){
         valor_anterior = input
-        print_display(valor_anterior);
+        printDisplay(valor_anterior);
         return
     }
     else{
-        print_display(input+valor_anterior)
+        printDisplay(input+valor_anterior)
         return input + valor_anterior;
     }
 }
 
-function subtrair(input){
+function minus(input){
     memory = ''
-    print_display(memory);
+    printDisplay(memory);
 }
