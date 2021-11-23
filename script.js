@@ -1,20 +1,23 @@
-var valueMemoryNew = '',
+// Variáveis globais do tipo STRING
+var valueMemory = '',
     valueMemoryOld = '';
+
+// Variáveis globais do tipo INT
+var newNumber,
+    oldNumber,
+    plusNumber;
 
 var button = document.getElementsByClassName('button');
 for (let i=0; i < button.length; i++){
-    button[i].addEventListener('click', inputvalueMemoryNew);
+    button[i].addEventListener('click', inputValue);
 }
 
 //função provisória
-function inputvalueMemoryNew(value){
-    console.log(value)
-    if (isNaN(valueMemoryNew)){   // Verifica se não é número (ac, +, -, Div, Percent, etc.) para não alterar o estado do display ('0')
-        printDisplay('')
-    }
+function inputValue(value){
     
     if (isNaN(value.path[0].id) === true){
-        if (value.path[0].id === "ac" ){
+        if (value.path[0].id === "AC" ){
+            ac();
             console.log('chamar função ac')
         }
 
@@ -31,32 +34,40 @@ function inputvalueMemoryNew(value){
         }
 
         else if(value.path[0].id === "times" ){
-            somar(valueMemoryNew);
+            somar(valueMemory);
             console.log('chamar função times');
         }
         
         else if(value.path[0].id === "minus" ){
-            somar(valueMemoryNew, valueMemoryOld);
             console.log('chamar função minus');
         }
         
         else if(value.path[0].id === "plus" ){
-            somar(valueMemoryNew);
+            plus(valueMemory);
             console.log('chamar função plus');
         }
     }
 
-    if (isNaN(value.path[0].id) === false){ //Verifica se é número e printa no display
-        let valueNumberInput = String(value.path[0].id);
-        valueMemoryNew += valueNumberInput;
-        printDisplay(valueMemoryNew);
+    if (isNaN(value.path[0].value) === false){ //Verifica se é número e printa no display
+        let valueNumberInput = String(value.path[0].value);
+        
+        let zeroToTheLeft = true;
+        if (valueMemory === '0' && zeroToTheLeft){
+            valueMemory = '';
+            zeroToTheLeft = false;
+            console.log('zerei')
+        }
+
+        valueMemory += valueNumberInput;
+        printDisplay(valueMemory);
     }
 }
 
 
-function main(){
-    console.log('função main()')
-}
+
+//function main(){
+//    console.log('função main()')
+//}
 
 
 
@@ -66,28 +77,49 @@ function printDisplay(value){  // Função que recebe um parâmetro para imprimi
     display.innerHTML = value;
 }
 
-// Função para o botão ac (limpa o display com uma string vazia)
+// Função para o botão ac (limpa o display com a string '0')
 function ac(){
-    valueMemoryNew = '0';
-    printDisplay(valueMemoryNew);
+    valueMemory = '0';
+    valueMemoryOld = '0';
+    newNumber = 0;
+    oldNumber = 0;
+    plusNumber = 0;
+    printDisplay(valueMemory);
 }
 
-function plus(input){
-    printDisplay('');
-    let valor_anterior = undefined;
+function plus(valueInput){
+    printDisplay('0');
 
-    if  (valor_anterior === undefined){
-        valor_anterior = input
-        printDisplay(valor_anterior);
-        return
-    }
-    else{
-        printDisplay(input+valor_anterior)
-        return input + valor_anterior;
+    newNumber = Number(valueInput);
+    if (oldNumber === '' || oldNumber === 0 || oldNumber === undefined){
+        oldNumber = newNumber;
+        valueMemory = '0';
+        return 
+    } 
+    else {
+        plusNumber = newNumber + oldNumber;
+        printDisplay(plusNumber);
+        return plusNumber;
     }
 }
 
 function minus(input){
-    valueMemoryNew = ''
-    printDisplay(valueMemoryNew);
+    valueMemory = ''
+    printDisplay(valueMemory);
 }
+
+
+// É zero à esquerda? Remove
+//function isItLeadingZero(value){
+//    let zeroToTheLeft = true;
+//
+//    if (value === '0' && zeroToTheLeft){
+//
+//        return true;
+//
+//        valueMemory = '';
+//        zeroToTheLeft = false;
+//        console.log('zerei')
+//    }
+//    return valueNew
+//}
