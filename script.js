@@ -1,75 +1,70 @@
 // Variáveis globais do tipo STRING
-var valueMemory = '',
-    valueMemoryOld = '';
+var valueInput = '',
+    valueInputOld = '',
+    newNumber = 0,
+    oldNumber = 0,
+    plusNumber = 0;
 
-// Variáveis globais do tipo INT
-var newNumber,
-    oldNumber,
-    plusNumber;
+// OK
+const buttonCommand = {
+    clearEntry(){
+        console.log('Chamado função clearEntry')
+    },
+    moreOrLess() {
+        console.log('Chamado função moreOrLess')
+    },
+    percent(){
+        console.log('Chamado função percent')
+    },
+    dividedBy(){
+        console.log('Chamado função dividedBy')
+    },
+    multiplication(){
+        console.log('Chamado função multiplication')
+    },
+    subtract() {
+        console.log('Chamado função subtract')
+    },
+    addUp() {
+        console.log('Chamado função addUp')
+    },
+    equals(){
+        console.log('Chamado função equals')
+    },
+    dot(){
+        console.log('Chamado função dot')
+    },
+    zero(){
+        console.log('Chamado função zero')
+    }
+}
 
 var button = document.getElementsByClassName('button');
 for (let i=0; i < button.length; i++){
     button[i].addEventListener('click', inputValue);
 }
 
-//função provisória
+// TEMP
 function inputValue(value){
-    
-    if (isNaN(value.path[0].id) === true){
-        if (value.path[0].id === "AC" ){
-            ac();
-            console.log('chamar função ac')
-        }
+    const inputValue = value.path[0].id
 
-        else if(value.path[0].id === "plus_minus" ){
-            console.log('chamar função plusMinus')
-        }
-        
-        else if(value.path[0].id === "percent" ){
-            console.log('chamar função percent')
-        }
-
-        else if(value.path[0].id === "divided_by" ){
-            console.log('chamar função dividedBy');
-        }
-
-        else if(value.path[0].id === "times" ){
-            somar(valueMemory);
-            console.log('chamar função times');
-        }
-        
-        else if(value.path[0].id === "minus" ){
-            console.log('chamar função minus');
-        }
-        
-        else if(value.path[0].id === "plus" ){
-            plus(valueMemory);
-            console.log('chamar função plus');
-        }
+    if (isNaN(inputValue)){
+        const calcNow = buttonCommand[inputValue];
+        calcNow(newNumber, oldNumber);
     }
-
-    if (isNaN(value.path[0].value) === false){ //Verifica se é número e printa no display
+    else {
         let valueNumberInput = String(value.path[0].value);
-        
+
         let zeroToTheLeft = true;
-        if (valueMemory === '0' && zeroToTheLeft){
-            valueMemory = '';
+        if (valueInput === '0' && zeroToTheLeft){
+            valueInput = '';
             zeroToTheLeft = false;
             console.log('zerei')
         }
-
-        valueMemory += valueNumberInput;
-        printDisplay(valueMemory);
+        valueInput += valueNumberInput;
+        printDisplay(valueInput);
     }
 }
-
-
-
-//function main(){
-//    console.log('função main()')
-//}
-
-
 
 // OK - FUNCIONANDO
 function printDisplay(value){  // Função que recebe um parâmetro para imprimir no display 
@@ -77,23 +72,24 @@ function printDisplay(value){  // Função que recebe um parâmetro para imprimi
     display.innerHTML = value;
 }
 
-// Função para o botão ac (limpa o display com a string '0')
+// TEMP
 function ac(){
-    valueMemory = '0';
-    valueMemoryOld = '0';
+    valueInput = '0';
+    valueInputOld = '0';
     newNumber = 0;
     oldNumber = 0;
     plusNumber = 0;
-    printDisplay(valueMemory);
+    printDisplay(valueInput);
 }
 
+// TEMP
 function plus(valueInput){
     printDisplay('0');
 
     newNumber = Number(valueInput);
     if (oldNumber === '' || oldNumber === 0 || oldNumber === undefined){
         oldNumber = newNumber;
-        valueMemory = '0';
+        valueInput = '0';
         return 
     } 
     else {
@@ -101,11 +97,6 @@ function plus(valueInput){
         printDisplay(plusNumber);
         return plusNumber;
     }
-}
-
-function minus(input){
-    valueMemory = ''
-    printDisplay(valueMemory);
 }
 
 
@@ -117,7 +108,7 @@ function minus(input){
 //
 //        return true;
 //
-//        valueMemory = '';
+//        valueInput = '';
 //        zeroToTheLeft = false;
 //        console.log('zerei')
 //    }
