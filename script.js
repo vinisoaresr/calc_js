@@ -1,14 +1,21 @@
-// Variáveis globais do tipo STRING
-var valueInput = '',
-    valueInputOld = '',
+// Variáveis globais
+var statusCalc = true,
+    valueInMemory = '',
     newNumber = 0,
     oldNumber = 0,
-    plusNumber = 0;
+    resultCalc= 0,
+    inputValue,
+    button;
 
-// OK
+// IMPLEMENTAR FUNÇÕES PARA CADA BOTÃO
 const buttonCommand = {
     clearEntry(){
-        console.log('Chamado função clearEntry')
+        console.log('Chamado função clearEntry');
+        valueInMemory = '';
+        newNumber = oldNumber = resultCalc = 0;
+        statusCalc = true;
+
+        return resultCalc
     },
     moreOrLess() {
         console.log('Chamado função moreOrLess')
@@ -27,42 +34,53 @@ const buttonCommand = {
     },
     addUp() {
         console.log('Chamado função addUp')
+
+        if (statusCalc){
+            statusCalc = false
+            oldNumber = newNumber;
+            newNumber = 0;
+            valueInMemory = '0';
+            return valueInMemory
+        }
+
+        return newNumber + oldNumber
     },
     equals(){
         console.log('Chamado função equals')
+
     },
     dot(){
         console.log('Chamado função dot')
     },
     zero(){
         console.log('Chamado função zero')
+        valueInMemory += 0;
+        return valueInMemory 
     }
 }
 
-var button = document.getElementsByClassName('button');
-for (let i=0; i < button.length; i++){
-    button[i].addEventListener('click', inputValue);
+window.onload = main();
+function main(){
+    button = document.getElementsByClassName('button');
+    for (let i=0; i < button.length; i++){
+        button[i].addEventListener('click', checkInputValue);
+    }
 }
 
+
 // TEMP
-function inputValue(value){
-    const inputValue = value.path[0].id
+function checkInputValue(value){
+    inputValue = value.path[0].id
 
     if (isNaN(inputValue)){
         const calcNow = buttonCommand[inputValue];
-        calcNow(newNumber, oldNumber);
+        resultCalc = calcNow(newNumber, oldNumber);
+        printDisplay(resultCalc);
     }
     else {
-        let valueNumberInput = String(value.path[0].value);
-
-        let zeroToTheLeft = true;
-        if (valueInput === '0' && zeroToTheLeft){
-            valueInput = '';
-            zeroToTheLeft = false;
-            console.log('zerei')
-        }
-        valueInput += valueNumberInput;
-        printDisplay(valueInput);
+        valueInMemory += String(value.path[0].value);
+        newNumber += Number(valueInMemory)
+        printDisplay(valueInMemory);
     }
 }
 
@@ -72,45 +90,11 @@ function printDisplay(value){  // Função que recebe um parâmetro para imprimi
     display.innerHTML = value;
 }
 
-// TEMP
-function ac(){
-    valueInput = '0';
-    valueInputOld = '0';
-    newNumber = 0;
-    oldNumber = 0;
-    plusNumber = 0;
-    printDisplay(valueInput);
-}
-
-// TEMP
-function plus(valueInput){
-    printDisplay('0');
-
-    newNumber = Number(valueInput);
-    if (oldNumber === '' || oldNumber === 0 || oldNumber === undefined){
-        oldNumber = newNumber;
-        valueInput = '0';
-        return 
-    } 
-    else {
-        plusNumber = newNumber + oldNumber;
-        printDisplay(plusNumber);
-        return plusNumber;
-    }
-}
-
-
-// É zero à esquerda? Remove
-//function isItLeadingZero(value){
-//    let zeroToTheLeft = true;
-//
-//    if (value === '0' && zeroToTheLeft){
-//
-//        return true;
-//
-//        valueInput = '';
-//        zeroToTheLeft = false;
-//        console.log('zerei')
-//    }
-//    return valueNew
-//}
+//FUNÇÃO P/ RETIRAR ZERO A ESQ.
+// let zeroToTheLeft = true;
+// if (valueInput === '0' && zeroToTheLeft){
+//     valueInput = '';
+//     zeroToTheLeft = false;
+//     console.log('zerei')
+// }
+// valueInput += valueNumberInput;
