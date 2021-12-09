@@ -1,18 +1,18 @@
 // Variáveis globais
-var valueInMemory = '',
-    newNumber = 0,
-    oldNumber = 0,
+var inputString = '',
+    latestValue = 0,
+    oldestValue = 0,
     resultCalc = 0,
-    valueDisplay = 0,
     inputValue,
+    lastStateCalc = '',
     button;
 
 // IMPLEMENTAR FUNÇÕES PARA CADA BOTÃO
 const buttonCommand = {
     clearEntry(){ // PRECISA TESTAR
         console.log('Chamando função clearEntry');
-        valueInMemory = '';
-        newNumber = oldNumber = resultCalc = 0;
+        inputString = '';
+        latestValue = oldestValue = resultCalc = 0;
 
         return resultCalc
     },
@@ -30,46 +30,48 @@ const buttonCommand = {
     },
     subtract() {
         console.log('Chamando função subtract')
+        lastStateCalc = 'subtract';
 
-        if (oldNumber == 0){
-            oldNumber = newNumber;
-            newNumber = 0;
-            valueInMemory = '0';
-            return valueInMemory
+        if (oldestValue == 0){
+            oldestValue = latestValue;
+            latestValue = 0;
+            inputString = '0';
+            return inputString
         }
-        resultCalc = newNumber - oldNumber;
-        oldNumber = resultCalc;
-        newNumber = 0;
-        valueInMemory = '0';
-        return resultCalc
+        else { 
+            resultCalc = oldestValue - latestValue;
+            oldestValue = resultCalc;
+            latestValue = 0;
+            inputString = '0';
+            return resultCalc
+        }
     },
     addUp() { // PRECISA TESTAR
         console.log('Chamando função addUp')
+        lastStateCalc = 'addUp';
 
-        if (oldNumber == 0){
-            oldNumber = newNumber;
-            newNumber = 0;
-            valueInMemory = '0';
-            return valueInMemory
+        if (oldestValue == 0){
+            oldestValue = latestValue;
+            latestValue = 0;
+            inputString = '0';
+            return inputString
         }
-        resultCalc = newNumber + oldNumber;
-        oldNumber = resultCalc;
-        newNumber = 0;
-        valueInMemory = '0';
-        return resultCalc
+        else { 
+            resultCalc = latestValue + oldestValue;
+            oldestValue = resultCalc;
+            latestValue = 0;
+            inputString = '0';
+            return resultCalc
+        }
     },
     equals(){
         console.log('Chamando função equals')
-
+        resultCalc = buttonCommand[lastStateCalc](latestValue, oldestValue);
+        return resultCalc
     },
     dot(){
         console.log('Chamando função dot')
     },
-    zero(){
-        console.log('Chamando função zero')
-        valueInMemory += 0;
-        return valueInMemory 
-    }
 }
 
 window.onload = main();
@@ -80,25 +82,25 @@ function main(){
     }
 }
 
-
-// OK - FUNCIONANDO (FUNÇÃO QUE LÊ OS BOTÕES E CHAMA AS RESPECTIVAS FUNÇÕES)
+// OK (FUNÇÃO QUE LÊ OS BOTÕES E CHAMA AS RESPECTIVAS FUNÇÕES)
 function checkInputValue(value){
     inputValue = value.path[0].id
 
     if (isNaN(inputValue)){
         const calcNow = buttonCommand[inputValue];
-        resultCalc = calcNow(newNumber, oldNumber);
+        resultCalc = calcNow(latestValue, oldestValue);
         printDisplay(resultCalc);
     }
     else {
-        valueInMemory += String(value.path[0].value);
-        newNumber = Number(valueInMemory)
-        printDisplay(valueInMemory);
+        inputString += String(value.path[0].value);
+        latestValue = Number(inputString)
+        printDisplay(inputString);
     }
 }
 
-// OK - FUNCIONANDO (FUNÇÃO P/ ESCREVER NO "DISPLAY")
-function printDisplay(value){  // Função que recebe um parâmetro para imprimir no display 
+// OK (FUNÇÃO P/ ESCREVER NO "DISPLAY")
+function printDisplay(value){
+    var valueDisplay = 0;
     let display = document.getElementById('display');
 
     if (typeof(value) == 'string'){
@@ -110,7 +112,7 @@ function printDisplay(value){  // Função que recebe um parâmetro para imprimi
     display.innerHTML = valueDisplay;
 }
 
-// OK - FUNCIONANDO (FUNÇÃO P/ RETIRAR ZERO A ESQ. OBS: SÓ RECEBE VALOR COMO STRING)
+// OK (FUNÇÃO P/ RETIRAR ZERO A ESQ. OBS: SÓ RECEBE VALOR COMO STRING)
 function cleanNumber(value) {
     if (value == '0'){
         return value
