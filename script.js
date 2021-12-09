@@ -1,59 +1,72 @@
 // Variáveis globais
-var statusCalc = true,
-    valueInMemory = '',
+var valueInMemory = '',
     newNumber = 0,
     oldNumber = 0,
-    resultCalc= 0,
+    resultCalc = 0,
+    valueDisplay = 0,
     inputValue,
     button;
 
 // IMPLEMENTAR FUNÇÕES PARA CADA BOTÃO
 const buttonCommand = {
-    clearEntry(){
-        console.log('Chamado função clearEntry');
+    clearEntry(){ // PRECISA TESTAR
+        console.log('Chamando função clearEntry');
         valueInMemory = '';
         newNumber = oldNumber = resultCalc = 0;
-        statusCalc = true;
 
         return resultCalc
     },
     moreOrLess() {
-        console.log('Chamado função moreOrLess')
+        console.log('Chamando função moreOrLess')
     },
     percent(){
-        console.log('Chamado função percent')
+        console.log('Chamando função percent')
     },
     dividedBy(){
-        console.log('Chamado função dividedBy')
+        console.log('Chamando função dividedBy')
     },
     multiplication(){
-        console.log('Chamado função multiplication')
+        console.log('Chamando função multiplication')
     },
     subtract() {
-        console.log('Chamado função subtract')
-    },
-    addUp() {
-        console.log('Chamado função addUp')
+        console.log('Chamando função subtract')
 
-        if (statusCalc){
-            statusCalc = false
+        if (oldNumber == 0){
             oldNumber = newNumber;
             newNumber = 0;
             valueInMemory = '0';
             return valueInMemory
         }
+        resultCalc = newNumber - oldNumber;
+        oldNumber = resultCalc;
+        newNumber = 0;
+        valueInMemory = '0';
+        return resultCalc
+    },
+    addUp() { // PRECISA TESTAR
+        console.log('Chamando função addUp')
 
-        return newNumber + oldNumber
+        if (oldNumber == 0){
+            oldNumber = newNumber;
+            newNumber = 0;
+            valueInMemory = '0';
+            return valueInMemory
+        }
+        resultCalc = newNumber + oldNumber;
+        oldNumber = resultCalc;
+        newNumber = 0;
+        valueInMemory = '0';
+        return resultCalc
     },
     equals(){
-        console.log('Chamado função equals')
+        console.log('Chamando função equals')
 
     },
     dot(){
-        console.log('Chamado função dot')
+        console.log('Chamando função dot')
     },
     zero(){
-        console.log('Chamado função zero')
+        console.log('Chamando função zero')
         valueInMemory += 0;
         return valueInMemory 
     }
@@ -68,7 +81,7 @@ function main(){
 }
 
 
-// TEMP
+// OK - FUNCIONANDO (FUNÇÃO QUE LÊ OS BOTÕES E CHAMA AS RESPECTIVAS FUNÇÕES)
 function checkInputValue(value){
     inputValue = value.path[0].id
 
@@ -79,22 +92,31 @@ function checkInputValue(value){
     }
     else {
         valueInMemory += String(value.path[0].value);
-        newNumber += Number(valueInMemory)
+        newNumber = Number(valueInMemory)
         printDisplay(valueInMemory);
     }
 }
 
-// OK - FUNCIONANDO
+// OK - FUNCIONANDO (FUNÇÃO P/ ESCREVER NO "DISPLAY")
 function printDisplay(value){  // Função que recebe um parâmetro para imprimir no display 
     let display = document.getElementById('display');
-    display.innerHTML = value;
+
+    if (typeof(value) == 'string'){
+        valueDisplay = cleanNumber(value)
+    }
+    else {
+        valueDisplay = value;
+    }
+    display.innerHTML = valueDisplay;
 }
 
-//FUNÇÃO P/ RETIRAR ZERO A ESQ.
-// let zeroToTheLeft = true;
-// if (valueInput === '0' && zeroToTheLeft){
-//     valueInput = '';
-//     zeroToTheLeft = false;
-//     console.log('zerei')
-// }
-// valueInput += valueNumberInput;
+// OK - FUNCIONANDO (FUNÇÃO P/ RETIRAR ZERO A ESQ. OBS: SÓ RECEBE VALOR COMO STRING)
+function cleanNumber(value) {
+    if (value == '0'){
+        return value
+    }
+    else {
+        let newValue = value.replace(/^0+/, '');
+        return newValue
+    }
+}
