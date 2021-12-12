@@ -3,7 +3,7 @@ var inputString = '',
     latestValue = 0,
     oldestValue = 0,
     resultCalc = 0,
-    inputValue,
+    inputValue = '',
     lastStateCalc = '',
     button;
 
@@ -18,15 +18,55 @@ const buttonCommand = {
     },
     moreOrLess() {
         console.log('Chamando função moreOrLess')
+        resultCalc = latestValue - (latestValue * 2);
+        lastStateCalc = resultCalc;
+        inputString = resultCalc;
+        return resultCalc
     },
     percent(){
         console.log('Chamando função percent')
+        lastStateCalc = 'percent';
+
+        resultCalc = latestValue/100;
+        latestValue = resultCalc;
+        inputString = resultCalc;
+        return resultCalc
     },
     dividedBy(){
         console.log('Chamando função dividedBy')
+        lastStateCalc = 'dividedBy';
+
+        if (oldestValue == 0){
+            oldestValue = latestValue;
+            latestValue = 0;
+            inputString = '0';
+            return inputString
+        }
+        else { 
+            resultCalc = oldestValue / latestValue;
+            oldestValue = resultCalc;
+            latestValue = 0;
+            inputString = '0';
+            return resultCalc
+        }
     },
     multiplication(){
         console.log('Chamando função multiplication')
+        lastStateCalc = 'multiplication';
+
+        if (oldestValue == 0){
+            oldestValue = latestValue;
+            latestValue = 0;
+            inputString = '0';
+            return inputString
+        }
+        else { 
+            resultCalc = oldestValue * latestValue;
+            oldestValue = resultCalc;
+            latestValue = 0;
+            inputString = '0';
+            return resultCalc
+        }
     },
     subtract() {
         console.log('Chamando função subtract')
@@ -56,8 +96,9 @@ const buttonCommand = {
             inputString = '0';
             return inputString
         }
+
         else { 
-            resultCalc = latestValue + oldestValue;
+            resultCalc = oldestValue + latestValue;
             oldestValue = resultCalc;
             latestValue = 0;
             inputString = '0';
@@ -66,11 +107,16 @@ const buttonCommand = {
     },
     equals(){
         console.log('Chamando função equals')
+
         resultCalc = buttonCommand[lastStateCalc](latestValue, oldestValue);
         return resultCalc
     },
     dot(){
         console.log('Chamando função dot')
+        inputString = inputString+'.';
+        printDisplay(inputString)
+        latestValue = Number(inputString);
+        return latestValue
     },
 }
 
@@ -87,8 +133,7 @@ function checkInputValue(value){
     inputValue = value.path[0].id
 
     if (isNaN(inputValue)){
-        const calcNow = buttonCommand[inputValue];
-        resultCalc = calcNow(latestValue, oldestValue);
+        resultCalc = buttonCommand[inputValue](latestValue, oldestValue);
         printDisplay(resultCalc);
     }
     else {
