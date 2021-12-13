@@ -1,124 +1,12 @@
 // Variáveis globais
 var inputString = '',
-    latestValue = 0,
-    oldestValue = 0,
-    resultCalc = 0,
     inputValue = '',
     lastStateCalc = '',
+    newValue = 0,
+    oldValue = 0,
+    resultCalc = 0,
     button;
 
-// IMPLEMENTAR FUNÇÕES PARA CADA BOTÃO
-const buttonCommand = {
-    clearEntry(){ // PRECISA TESTAR
-        console.log('Chamando função clearEntry');
-        inputString = '';
-        latestValue = oldestValue = resultCalc = 0;
-
-        return resultCalc
-    },
-    moreOrLess() {
-        console.log('Chamando função moreOrLess')
-        resultCalc = latestValue - (latestValue * 2);
-        lastStateCalc = resultCalc;
-        inputString = resultCalc;
-        return resultCalc
-    },
-    percent(){
-        console.log('Chamando função percent')
-        lastStateCalc = 'percent';
-
-        resultCalc = latestValue/100;
-        latestValue = resultCalc;
-        inputString = resultCalc;
-        return resultCalc
-    },
-    dividedBy(){
-        console.log('Chamando função dividedBy')
-        lastStateCalc = 'dividedBy';
-
-        if (oldestValue == 0){
-            oldestValue = latestValue;
-            latestValue = 0;
-            inputString = '0';
-            return inputString
-        }
-        else { 
-            resultCalc = oldestValue / latestValue;
-            oldestValue = resultCalc;
-            latestValue = 0;
-            inputString = '0';
-            return resultCalc
-        }
-    },
-    multiplication(){
-        console.log('Chamando função multiplication')
-        lastStateCalc = 'multiplication';
-
-        if (oldestValue == 0){
-            oldestValue = latestValue;
-            latestValue = 0;
-            inputString = '0';
-            return inputString
-        }
-        else { 
-            resultCalc = oldestValue * latestValue;
-            oldestValue = resultCalc;
-            latestValue = 0;
-            inputString = '0';
-            return resultCalc
-        }
-    },
-    subtract() {
-        console.log('Chamando função subtract')
-        lastStateCalc = 'subtract';
-
-        if (oldestValue == 0){
-            oldestValue = latestValue;
-            latestValue = 0;
-            inputString = '0';
-            return inputString
-        }
-        else { 
-            resultCalc = oldestValue - latestValue;
-            oldestValue = resultCalc;
-            latestValue = 0;
-            inputString = '0';
-            return resultCalc
-        }
-    },
-    addUp() { // PRECISA TESTAR
-        console.log('Chamando função addUp')
-        lastStateCalc = 'addUp';
-
-        if (oldestValue == 0){
-            oldestValue = latestValue;
-            latestValue = 0;
-            inputString = '0';
-            return inputString
-        }
-
-        else { 
-            resultCalc = oldestValue + latestValue;
-            oldestValue = resultCalc;
-            latestValue = 0;
-            inputString = '0';
-            return resultCalc
-        }
-    },
-    equals(){
-        console.log('Chamando função equals')
-
-        resultCalc = buttonCommand[lastStateCalc](latestValue, oldestValue);
-        return resultCalc
-    },
-    dot(){
-        console.log('Chamando função dot')
-        inputString = inputString+'.';
-        printDisplay(inputString)
-        latestValue = Number(inputString);
-        return latestValue
-    },
-}
 
 window.onload = main();
 function main(){
@@ -128,17 +16,142 @@ function main(){
     }
 }
 
+
+// IMPLEMENTAR FUNÇÕES PARA CADA BOTÃO
+const buttonCommand = {
+    clearEntry(){
+        console.log('Chamando função clearEntry');
+        inputString = '0';
+        lastStateCalc = '';
+        newValue = oldValue = resultCalc = 0;
+        return inputString
+    },
+    moreOrLess(newValue, oldValue) {
+        console.log('Chamando função moreOrLess')
+        resultCalc = Number(newValue) - (Number(newValue) * 2);
+        lastStateCalc = resultCalc;
+        inputString = String(resultCalc);
+        return resultCalc
+    },
+    percent(newValue, oldValue){
+        console.log('Chamando função percent')
+        lastStateCalc = 'percent';
+
+        resultCalc = newValue/100;
+        newValue = resultCalc;
+        inputString = resultCalc;
+        return resultCalc
+    },
+    dividedBy(newValue, oldValue){
+        console.log('Chamando função dividedBy')
+
+        resultCalc = oldValue / newValue;
+        return resultCalc
+    },
+    multiplication(newValue, oldValue){
+        console.log('Chamando função multiplication')
+        resultCalc = oldValue * newValue;
+        return resultCalc
+        
+    },
+    subtract(newValue, oldValue) {
+        console.log('Chamando função subtract')
+        resultCalc = oldValue - newValue;
+        return resultCalc
+    },
+    addUp(newValue, oldValue) { 
+        console.log('Chamando função addUp')
+        resultCalc = oldValue + newValue;
+        return resultCalc
+    },
+    equals(newValue, oldValue){
+        console.log('Chamando função equals')
+
+        if (lastStateCalc == ''){
+            return
+        }
+        else {
+            resultCalc = buttonCommand[lastStateCalc](newValue, oldValue);
+            return resultCalc
+        }
+    },
+    dot(newValue, oldValue){
+        console.log('Chamando função dot')
+        inputString = inputString+'.';
+        printDisplay(inputString)
+        newValue = Number(inputString);
+        return newValue
+    },
+}
+
+
+const lastOperation = {
+    clearEntry(value) {
+        console.log('lastStateCalc = clearEntry')
+        return 'clearEntry';
+    },
+    moreOrLess(value) {
+        console.log('lastStateCalc = moreOrLess')
+        return 'moreOrLess';
+    },
+    percent(){
+        console.log('lastStateCalc = percent')
+        return 'percent';
+    },
+    dividedBy(){
+        console.log('lastStateCalc = dividedBy')
+        return 'dividedBy';
+    },
+    multiplication(){
+        console.log('lastStateCalc = multiplication')
+        return 'multiplication';
+    },
+    subtract() {
+        console.log('lastStateCalc = subtract')
+        return 'subtract';
+    },
+    addUp() {
+        console.log('lastStateCalc = addUp')
+        return 'addUp';
+    },
+    equals(){
+        console.log('lastStateCalc = equals')
+        return 'equals';
+    },
+    dot(){
+        console.log('lastStateCalc = dot')
+        return 'dot';
+    },
+}
+
+
 // OK (FUNÇÃO QUE LÊ OS BOTÕES E CHAMA AS RESPECTIVAS FUNÇÕES)
 function checkInputValue(value){
     inputValue = value.path[0].id
 
-    if (isNaN(inputValue)){
-        resultCalc = buttonCommand[inputValue](latestValue, oldestValue);
+    if (isNaN(inputValue)){//SE É
+        if (inputValue != 'clearEntry' || inputValue != 'equals'){
+            resultCalc = buttonCommand[inputValue](newValue, oldValue);
+            lastStateCalc = lastOperation[inputValue]();
+
+            oldValue = resultCalc;
+            newValue = 0;
+            inputString = '0';
+        }
+        else if (inputValue = 'equals'){
+            resultCalc = buttonCommand['equals'](newValue, oldValue);
+            oldValue = resultCalc;
+            newValue = 0;
+            inputString = '0';    
+        }
+        else{
+            resultCalc = buttonCommand['clearEntry']();
+        }
         printDisplay(resultCalc);
     }
-    else {
+    else { //SE É NÚMERO
         inputString += String(value.path[0].value);
-        latestValue = Number(inputString)
+        newValue = Number(inputString)
         printDisplay(inputString);
     }
 }
