@@ -134,6 +134,7 @@ function checkInputValue(value){
             inputString = '0';
 
             resultCalc = buttonCommand[inputValue](newValue, oldValue);
+            printDisplay(0);
             lastStateCalc = inputValue;
 
             oldValue = resultCalc;
@@ -142,19 +143,18 @@ function checkInputValue(value){
             resultCalc = buttonCommand['equals'](newValue, oldValue);
             oldValue = resultCalc;
             newValue = 0;
-            inputString = '0';    
+            inputString = '0';
+            printDisplay(resultCalc);
         }
         else if (inputValue === 'moreOrLess'){
-
             resultCalc = buttonCommand['moreOrLess'](newValue);
-
             newValue = resultCalc;
             printDisplay(String(newValue));
         }
         else{
             resultCalc = buttonCommand['clearEntry']();
+            printDisplay(resultCalc);
         }
-        printDisplay(resultCalc);
     }
     else { //SE É NÚMERO
         
