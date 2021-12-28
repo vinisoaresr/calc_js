@@ -26,16 +26,14 @@ const buttonCommand = {
         newValue = oldValue = resultCalc = 0;
         return inputString
     },
-    moreOrLess(newValue, oldValue) {
+    moreOrLess(newValue) {
         console.log('Chamando função moreOrLess')
-        resultCalc = Number(newValue) - (Number(newValue) * 2);
-        lastStateCalc = resultCalc;
+        resultCalc = newValue - (newValue * 2);
         inputString = String(resultCalc);
         return resultCalc
     },
-    percent(newValue, oldValue){
+    percent(newValue){
         console.log('Chamando função percent')
-        lastStateCalc = 'percent';
 
         resultCalc = newValue/100;
         newValue = resultCalc;
@@ -75,7 +73,7 @@ const buttonCommand = {
             return resultCalc
         }
     },
-    dot(newValue, oldValue){
+    dot(newValue){
         console.log('Chamando função dot')
         inputString = inputString+'.';
         printDisplay(inputString)
@@ -84,7 +82,7 @@ const buttonCommand = {
     },
 }
 
-
+/*
 const lastOperation = {
     clearEntry(value) {
         console.log('lastStateCalc = clearEntry')
@@ -122,7 +120,7 @@ const lastOperation = {
         console.log('lastStateCalc = dot')
         return 'dot';
     },
-}
+} */
 
 
 // OK (FUNÇÃO QUE LÊ OS BOTÕES E CHAMA AS RESPECTIVAS FUNÇÕES)
@@ -130,19 +128,28 @@ function checkInputValue(value){
     inputValue = value.path[0].id
 
     if (isNaN(inputValue)){//SE É
-        if (inputValue != 'clearEntry' || inputValue != 'equals'){
-            resultCalc = buttonCommand[inputValue](newValue, oldValue);
-            lastStateCalc = lastOperation[inputValue]();
-
-            oldValue = resultCalc;
+        if ((inputValue != 'clearEntry') && (inputValue != 'equals') && (inputValue != 'moreOrLess')){
+            oldValue = newValue;
             newValue = 0;
             inputString = '0';
+
+            resultCalc = buttonCommand[inputValue](newValue, oldValue);
+            lastStateCalc = inputValue;
+
+            oldValue = resultCalc;
         }
-        else if (inputValue = 'equals'){
+        else if (inputValue === 'equals'){
             resultCalc = buttonCommand['equals'](newValue, oldValue);
             oldValue = resultCalc;
             newValue = 0;
             inputString = '0';    
+        }
+        else if (inputValue === 'moreOrLess'){
+
+            resultCalc = buttonCommand['moreOrLess'](newValue);
+
+            newValue = resultCalc;
+            printDisplay(String(newValue));
         }
         else{
             resultCalc = buttonCommand['clearEntry']();
@@ -150,6 +157,7 @@ function checkInputValue(value){
         printDisplay(resultCalc);
     }
     else { //SE É NÚMERO
+        
         inputString += String(value.path[0].value);
         newValue = Number(inputString)
         printDisplay(inputString);
